@@ -1,0 +1,94 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:platon_calc/forms/calculate_bloc/calculate_bloc.dart';
+import 'package:platon_calc/text_with_input_widget.dart';
+import 'package:reactive_forms/reactive_forms.dart';
+
+class LiquidationForm extends StatefulWidget {
+  const LiquidationForm({super.key});
+
+  @override
+  State<LiquidationForm> createState() => _LiquidationFormState();
+}
+
+class _LiquidationFormState extends State<LiquidationForm> {
+  final FormControl<double> existVolumeController = FormControl(
+    validators: [Validators.required],
+  );
+  final FormControl<double> requiredIntenseController = FormControl(
+    validators: [Validators.required],
+  );
+  final FormControl<double> timeController = FormControl(
+    validators: [Validators.required],
+  );
+
+  double? calcResult;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<CalculateBloc, CalculateState>(
+      listener: (context, state) {
+        state.mapOrNull(
+          calculated: (_) {
+            _calculate();
+          },
+        );
+      },
+      child: Column(
+        children: [
+          TextWithInputWidget(
+            text: 'Имеющийся объем раствора пенообразоватея в воде',
+            controller: existVolumeController,
+            unit: 'л',
+          ),
+          const SizedBox(height: 32),
+          TextWithInputWidget(
+            text: 'Требуемая интенсивность подачи раствора',
+            controller: requiredIntenseController,
+            unit: 'л/(кв.м * с)',
+          ),
+          const SizedBox(height: 32),
+          TextWithInputWidget(
+            text: 'Нормативное время подачи огнетушащего вещества',
+            controller: timeController,
+            unit: 'сек',
+          ),
+          const SizedBox(height: 32),
+          if (calcResult != null) ...[
+            SizedBox(
+              height: 200,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      color: Colors.red.withOpacity(0.6),
+                      child: Center(
+                        child: Text(
+                          '$calcResult кв.м',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 40,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  void _calculate() {
+    final double result = existVolumeController.value! /
+        (requiredIntenseController.value! * timeController.value!);
+
+    setState(() {
+      calcResult = double.parse(result.toStringAsFixed(2));
+    });
+  }
+}

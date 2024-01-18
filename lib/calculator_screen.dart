@@ -58,6 +58,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                     Expanded(
                       child: CustomButton(
                         onTap: () {
+                          FocusScope.of(context).unfocus();
+
                           bloc.add(const CalculateEvent.calculate());
                         },
                         title: 'Расчет',

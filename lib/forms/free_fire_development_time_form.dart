@@ -72,12 +72,11 @@ class _FreeFireDevelopmentTimeFormState
               height: 200,
               child: Row(
                 children: [
-                  Expanded(
-                    child: Container(
+                  Expanded(                    child: Container(
                       color: Colors.red.withOpacity(0.6),
                       child: Center(
                         child: Text(
-                          '$calcResult',
+                          '$calcResult мин.',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 40,

@@ -18,9 +18,12 @@ class TextWithInputWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(
-          text,
-          style: const TextStyle(fontSize: 18),
+        Flexible(
+          child: Text(
+            text,
+            maxLines: 10,
+            style: const TextStyle(fontSize: 18),
+          ),
         ),
         const SizedBox(width: 16),
         SizedBox(
@@ -42,7 +45,6 @@ class TextWithInputWidget extends StatelessWidget {
                 ),
               ),
             ),
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           ),
         ),
         const SizedBox(width: 16),
